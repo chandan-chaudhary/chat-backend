@@ -1,0 +1,87 @@
+### Variables
+@baseUrl = http://localhost:3000
+# Copy tokens from user creation responses
+@token1 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInVzZXJuYW1lIjoiQW1pdCIsImlhdCI6MTc2NjU5MDMxNSwiZXhwIjoxNzY3MTk1MTE1fQ.NY5hJCTsvajUH2kZGV3Ekd_Hx3kL7tVS4_bBH47CRz0
+
+@token2 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInVzZXJuYW1lIjoiQW1pdCIsImlhdCI6MTc2NjU4NzczMCwiZXhwIjoxNzY3MTkyNTMwfQ.ZYk1Ykq9Z3VhY2F0bWZsY2hXMWxXU3VTMl9Gb3o0RmJqakE
+### ============================================
+### MESSAGING
+### ============================================
+
+### Send Message from User 1 to User 2
+POST {{baseUrl}}/api/messages/send
+Content-Type: application/json
+Authorization: Bearer {{token1}}
+
+{
+  "receiverId": 1,
+  "content": "Hello! How are you from amit"
+}
+
+### Send Message from User 2 to User 1
+POST {{baseUrl}}/api/messages/send
+Content-Type: application/json
+Authorization: Bearer {{token2}}
+
+{
+  "receiverId": 1,
+  "content": "Hi! I'm doing great, thanks!"
+}
+
+### Send Another Message
+POST {{baseUrl}}/api/messages/send
+Content-Type: application/json
+Authorization: Bearer {{token1}}
+
+{
+  "receiverId": 2,
+  "content": "That's wonderful! Want to grab coffee later?"
+}
+
+### ============================================
+### CHAT HISTORY
+### ============================================
+
+### Get Chat History with User 2 (as User 1)
+GET {{baseUrl}}/api/messages/history/2
+Authorization: Bearer {{token1}}
+
+### Get Chat History with User 1 (as User 2)
+GET {{baseUrl}}/api/messages/history/1
+Authorization: Bearer {{token2}}
+
+### Get Chat History with User 3
+GET {{baseUrl}}/api/messages/history/3
+Authorization: Bearer {{token1}}
+
+### ============================================
+### CONVERSATIONS
+### ============================================
+
+### Get All Conversations (User 1)
+GET {{baseUrl}}/api/conversations
+Authorization: Bearer {{token1}}
+
+### Get All Conversations (User 2)
+GET {{baseUrl}}/api/conversations
+Authorization: Bearer {{token2}}
+
+### ============================================
+### MESSAGE STATUS
+### ============================================
+
+### Mark Message ID 1 as Read
+PATCH {{baseUrl}}/api/messages/1/read
+Authorization: Bearer {{token2}}
+
+### Mark Message ID 2 as Read
+PATCH {{baseUrl}}/api/messages/2/read
+Authorization: Bearer {{token1}}
+
+### Get Unread Message Count (User 1)
+GET {{baseUrl}}/api/messages/unread/count
+Authorization: Bearer {{token1}}
+
+### Get Unread Message Count (User 2)
+GET {{baseUrl}}/api/messages/unread/count
+Authorization: Bearer {{token2}}

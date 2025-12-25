@@ -1,9 +1,9 @@
 ### Variables
 @baseUrl = http://localhost:3000
 # Copy tokens from user creation responses
-@token1 =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjExLCJ1c2VybmFtZSI6InBhYmxvIiwiaWF0IjoxNzY2Njg5OTYwLCJleHAiOjE3NjY3NzYzNjB9.hHPYGo9R_Jp3ja075Svgp3wBeQAHb4T_IB1jdHeKx7Q
+@token1 =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjExLCJ1c2VybmFtZSI6InBhYmxvIiwiaWF0IjoxNzY2NjkxMDg3LCJleHAiOjE3NjY3Nzc0ODd9.3JDDM_hnqbbqJ8UYxZqgdhPwE1x1uOr5zsDZt1eRF6o
 
-@token2 =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJuYW1lIjoiYW1pdCIsImlhdCI6MTc2NjY5MDAwNiwiZXhwIjoxNzY2Nzc2NDA2fQ.NWFG-Ob1E9KxpJJJWshRmN2NPo-lFy_jiGRttEsT1Lw
+@token2 =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJuYW1lIjoiYW1pdCIsImlhdCI6MTc2NjY5MTA0NiwiZXhwIjoxNzY2Nzc3NDQ2fQ.QegBbXXVHYzSFkCuVAxGiekxQIsg9hQEU7tLbOvTK9A
 
 
 ### ============================================
@@ -17,7 +17,7 @@ Authorization: Bearer {{token1}}
 
 {
   "receiverUsername": "AMIT",
-  "content": "night out tonight?"
+  "content": "final test"
 }
 
 ### Send Message from User 2 to User 1
@@ -26,7 +26,7 @@ Content-Type: application/json
 Authorization: Bearer {{token2}}
 
 {
-  "receiverUsername": "PABLO",
+  "receiverUsername": "pablo",
   "content": "sure, what time night out?"
 }
 

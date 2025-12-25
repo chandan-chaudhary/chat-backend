@@ -1,0 +1,19 @@
+###Reference: Socket Connection API (Login + Connect)
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJuYW1lIjoiYW1pdCIsImlhdCI6MTc2NjY5MDAwNiwiZXhwIjoxNzY2Nzc2NDA2fQ.NWFG-Ob1E9KxpJJJWshRmN2NPo-lFy_jiGRttEsT1Lw
+
+### Socket Connect (Login + Connect in one call)
+POST http://localhost:3000/api/socket/connect
+Content-Type: application/json
+
+{
+  "username": "AMIT"
+}
+
+###
+
+### Socket Disconnect
+POST http://localhost:3000/api/socket/disconnect
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###

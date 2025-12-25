@@ -7,6 +7,7 @@
     "dev": "nodemon src/app.ts",
     "build": "tsc",
     "start": "node dist/src/app.js",
+    "connect": "ts-node src/connect-user.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio"

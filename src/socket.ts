@@ -10,7 +10,7 @@ interface AuthenticatedSocket extends Socket {
 }
 
 interface MessageData {
-  receiverId: number;
+  receiverUsername: string;
   content: string;
 }
 
@@ -66,7 +66,19 @@ export const initializeSocket = (io: Server) => {
       try {
         if (!socket.userId) return;
 
-        const { receiverId, content } = data;
+        const { receiverUsername, content } = data;
+
+        // Find receiver by username
+        const receiver = await prisma.user.findUnique({
+          where: { username: receiverUsername.trim().toLowerCase() },
+        });
+
+        if (!receiver) {
+          socket.emit("error", { message: "Receiver not found" });
+          return;
+        }
+
+        const receiverId = receiver.id;
 
         // Get or create conversation
         let conversation = await prisma.conversation.findFirst({
@@ -112,13 +124,13 @@ export const initializeSocket = (io: Server) => {
         });
 
         // Send message to receiver if online
-        const receiver = await prisma.user.findUnique({
+        const receiverStatus = await prisma.user.findUnique({
           where: { id: receiverId },
           select: { socketId: true, isOnline: true },
         });
 
-        if (receiver?.socketId && receiver.isOnline) {
-          io.to(receiver.socketId).emit("message:receive", message);
+        if (receiverStatus?.socketId && receiverStatus.isOnline) {
+          io.to(receiverStatus.socketId).emit("message:receive", message);
         }
 
         // Send confirmation to sender
@@ -173,19 +185,6 @@ export const initializeSocket = (io: Server) => {
       }
     });
 
-    // Handle mark message as read
-    socket.on("message:read", async (data: { messageId: number }) => {
-      try {
-        await prisma.message.update({
-          where: { id: data.messageId },
-          data: { isRead: true },
-        });
-
-        socket.emit("message:read:success", { messageId: data.messageId });
-      } catch (error) {
-        console.error("Error marking message as read:", error);
-      }
-    });
 
     // Handle get online users
     socket.on("users:online", async () => {

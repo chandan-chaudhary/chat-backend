@@ -1,6 +1,7 @@
 ### Variables
 @baseUrl = http://localhost:3000
 
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJuYW1lIjoiYW1pdCIsImlhdCI6MTc2NjY4NjI0MSwiZXhwIjoxNzY2NzcyNjQxfQ.mNLvfFdo89c5735FfXXmWcfosXVvaVG63dfx-BAp4Ss
 
 ### Health Check
 GET {{baseUrl}}/health
@@ -10,8 +11,7 @@ POST {{baseUrl}}/api/users/create
 Content-Type: application/json
 
 {
-  "username": "Chandan",
-  "autoConnect": true
+  "username": "Pablo"
 }
 
 ### Create User 2 (Auto-connect Online)
@@ -19,16 +19,12 @@ POST {{baseUrl}}/api/users/create
 Content-Type: application/json
 
 {
-  "username": "Amit",
-  "autoConnect": true
+  "username": "Amit"
 }
-
 
 ### Get All Users
 GET {{baseUrl}}/api/users
+Authorization: Bearer {{token}}
 
-### Check User Connection Status (User ID 2)
-GET {{baseUrl}}/api/users/1/status
-
-### Check User Connection Status (User ID 4)
-GET {{baseUrl}}/api/users/4/status
+### Get All Online Users
+GET {{baseUrl}}/api/users/online

@@ -1,125 +1,389 @@
-# REST Client Testing Guide
+# Real-Time Chat Application
 
-## Files Overview
+A full-featured real-time chat application built with Node.js, Express, Socket.IO, Prisma, and PostgreSQL. Users can create accounts, connect to the chat server, send messages to other users, and see real-time online/offline status.
 
-1. **auth.http** - HTTP requests for testing REST API endpoints
-2. **socket-events.md** - Documentation of all Socket.IO events
-3. **test-client.html** - Interactive HTML client for testing
+## 🚀 Features
 
-## How to Test
+- ✅ User authentication with JWT tokens
+- ✅ Real-time messaging with Socket.IO
+- ✅ Online/offline status tracking
+- ✅ Chat history persistence
+- ✅ Username-based messaging (no need to remember IDs)
+- ✅ PostgreSQL database with Prisma ORM
+- ✅ REST API + WebSocket support
+- ✅ Terminal-based chat client
 
-### Option 1: Using HTTP Files (VS Code REST Client Extension)
+## 🛠️ Tech Stack
 
-1. Install "REST Client" extension in VS Code
-2. Open `auth.http`
-3. Click "Send Request" above each request
-4. View responses inline
+- **Backend:** Node.js, Express, TypeScript
+- **Real-time:** Socket.IO
+- **Database:** PostgreSQL (Neon)
+- **ORM:** Prisma
+- **Auth:** JWT (jsonwebtoken)
 
-### Option 2: Using the HTML Test Client
+## 📋 Prerequisites
 
-1. Start your server: `npm run dev`
-2. Open `test-client.html` in a browser
-3. Use the interactive UI to:
-   - Create users and connect
-   - Send messages
-   - View online users
-   - Fetch chat history
-   - See real-time messages
+- Node.js (v16 or higher)
+- npm or yarn
+- PostgreSQL database (or use Neon cloud database)
 
-### Option 3: Using cURL
+## ⚙️ Setup Instructions
+
+### 1. Clone and Install Dependencies
 
 ```bash
-# Health check
-curl http://localhost:3000/health
+cd chat-app
+npm install
+```
 
-# Create user
+### 2. Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+DATABASE_URL=your_postgresql_connection_string
+JWT_SECRET=your_secret_key_here
+PORT=3000
+API_URL=http://localhost:{{PORT}}
+```
+
+
+### 3. Database Setup
+
+```bash
+# Generate Prisma client
+npm run prisma:generate
+
+# Run migrations
+npm run prisma:migrate
+
+# (Optional) Open Prisma Studio to view database
+npm run prisma:studio
+```
+
+## 🏃 Running the Application
+
+### Start the Server
+
+```bash
+npm run dev
+```
+
+You should see:
+
+```
+🚀 Chat Server is running!
+
+📡 Server URL: http://localhost:3000
+🔌 Socket.IO: ws://localhost:3000
+```
+
+## 💬 How to Chat
+
+### Quick Start Guide
+
+**Step 1:** Start the server
+
+```bash
+npm run dev
+```
+
+**Step 2:** Register a new user (using `rest-client/auth.http` in VS Code)
+
+Open `rest-client/auth.http` and click "Send Request":
+
+```http
+POST http://localhost:3000/api/users/create
+Content-Type: application/json
+
+{
+  "username": "USERNAME_HERE"
+}
+```
+
+**Step 3:** Login and connect to Socket.IO (using `rest-client/socketconnection.http`)
+
+Open `rest-client/socketconnection.http` and click "Send Request":
+
+```http
+POST http://localhost:3000/api/socket/connect
+Content-Type: application/json
+
+{
+  "username": "USERNAME_HERE"
+}
+```
+
+Response:
+
+```json
+{
+  "user": {
+    "id": 1,
+    "username": "USERNAME_HERE",
+    "isOnline": true
+  },
+  "token": "eyJhbGci...",
+  "socketId": "abc123",
+  "socketConnected": true
+}
+```
+
+Save the token for authenticated requests!
+
+**Step 4:** Send messages
+
+Open `rest-client/chat.http` and update the token, then send:
+
+```http
+@token = YOUR_TOKEN_HERE
+
+POST http://localhost:3000/api/messages/send
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "receiverUsername": "USERNAME_OF_RECEIVER",
+  "content": "Hello!"
+}
+```
+
+The message will be delivered in real-time to Bob if they're connected!
+
+## 📡 API Endpoints
+
+### REST API
+
+| Method | Endpoint                          | Auth Required | Description                | Body                                              |
+| ------ | --------------------------------- | ------------- | -------------------------- | ------------------------------------------------- |
+| GET    | `/health`                         | No            | Health check               | -                                                 |
+| POST   | `/api/users/create`               | No            | Register new user          | `{ "username": "USERNAME_HERE" }`                         |
+| GET    | `/api/users`                      | Yes           | Get all users              | -                                                 |
+| GET    | `/api/users/online`               | No            | Get online users only      | -                                                 |
+| POST   | `/api/socket/connect`             | No            | Login & connect to socket  | `{ "username": "USERNAME_HERE" }`                         |
+| POST   | `/api/socket/disconnect`          | Yes           | Disconnect from socket     | -                                                 |
+| POST   | `/api/messages/send`              | Yes           | Send message               | `{ "receiverUsername": "USERNAME_OF_RECEIVER", "content": "Hello!" }` |
+| GET    | `/api/messages/history/:username` | Yes           | Get chat history with user | -                                                 |
+| GET    | `/api/conversations`              | Yes           | Get all conversations      | -                                                 |
+
+### Authentication
+
+For endpoints requiring auth, include the JWT token in the Authorization header:
+
+```
+Authorization: Bearer <your_token>
+```
+
+## 🔌 Socket.IO Events
+
+### Client → Server (Emit)
+
+| Event          | Data                                            | Description                  |
+| -------------- | ----------------------------------------------- | ---------------------------- |
+| `message:send` | `{ receiverUsername: string, content: string }` | Send a message               |
+| `chat:history` | `{ otherUserId: number }`                       | Request chat history         |
+| `users:online` | -                                               | Request list of online users |
+
+### Server → Client (Listen)
+
+| Event                   | Data                             | Description                        |
+| ----------------------- | -------------------------------- | ---------------------------------- |
+| `connect`               | -                                | Successfully connected             |
+| `message:receive`       | `Message`                        | Receive a new message              |
+| `message:sent`          | `Message`                        | Confirmation that message was sent |
+| `user:online`           | `{ userId, username, isOnline }` | User came online                   |
+| `user:offline`          | `{ userId, username, isOnline }` | User went offline                  |
+| `chat:history:response` | `{ messages: Message[] }`        | Chat history response              |
+| `users:online:response` | `User[]`                         | Online users list                  |
+| `error`                 | `{ message: string }`            | Error occurred                     |
+
+## 📁 Project Structure
+
+```
+chat-app/
+├── src/
+│   ├── app.ts                       # Express app setup
+│   ├── socket.ts                    # Socket.IO server setup
+│   ├── prisma.ts                    # Prisma client instance
+│   ├── clientSocketConnection.ts    # Socket connection management
+│   ├── controllers/
+│   │   ├── user.controller.ts       # User registration
+│   │   ├── socket.controller.ts     # Socket connect/disconnect
+│   │   ├── message.controller.ts    # Message operations
+│   │   └── conversation.controller.ts # Conversation management
+│   ├── middleware/
+│   │   └── auth.middleware.ts       # JWT authentication
+│   └── routes/
+│       ├── index.ts                 # Route aggregation
+│       ├── user.routes.ts           # User endpoints
+│       ├── socket.routes.ts         # Socket endpoints
+│       ├── message.routes.ts        # Message endpoints
+│       └── conversation.routes.ts   # Conversation endpoints
+├── prisma/
+│   ├── schema.prisma                # Database schema
+│   └── migrations/                  # Database migrations
+├── rest-client/
+│   ├── auth.http                    # User registration tests
+│   ├── socketconnection.http        # Socket connection tests
+│   └── chat.http                    # Chat API tests
+├── .env                             # Environment variables
+├── package.json                     # Dependencies & scripts
+├── tsconfig.json                    # TypeScript config
+└── nodemon.json                     # Nodemon config
+```
+
+## 🎯 Usage Examples
+
+### Register a New User
+
+```bash
 curl -X POST http://localhost:3000/api/users/create \
   -H "Content-Type: application/json" \
-  -d '{"username": "alice"}'
-
-# Get all users
-curl http://localhost:3000/api/users
+  -d '{"username": "user1"}'
 ```
 
-## Testing Socket.IO Events
+Response:
 
-### Using Node.js Client
-
-```javascript
-const io = require("socket.io-client");
-
-// First, create a user via REST API to get a token
-// Then use the token to connect:
-
-const socket = io("http://localhost:3000", {
-  auth: { token: "YOUR_JWT_TOKEN" },
-});
-
-socket.on("connect", () => {
-  console.log("Connected!");
-
-  // Send a message
-  socket.emit("message:send", {
-    receiverId: 2,
-    content: "Hello!",
-  });
-});
-
-socket.on("message:receive", (msg) => {
-  console.log("Received:", msg);
-});
+```json
+{
+  "id": 1,
+  "username": "user1",
+  "isOnline": false
+}
 ```
 
-## Complete Testing Flow
+### Login and Connect to Socket
 
-1. **Start Server**
+```bash
+curl -X POST http://localhost:3000/api/socket/connect \
+  -H "Content-Type: application/json" \
+  -d '{"username": "user1"}'
+```
 
-   ```bash
-   npm run dev
-   ```
+Response:
 
-2. **Create Users**
+```json
+{
+  "user": {
+    "id": 1,
+    "username": "user1",
+    "isOnline": true
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "socketId": "abc123xyz",
+  "socketConnected": true
+}
+```
 
-   - Use `auth.http` or test client to create 2+ users
-   - Save the JWT tokens
+### Send a Message (REST API)
 
-3. **Connect via Socket.IO**
+```bash
+curl -X POST http://localhost:3000/api/messages/send \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "receiverUsername": "user2",
+    "content": "Hello user2!"
+  }'
+```
 
-   - Open `test-client.html` in multiple browser tabs
-   - Login with different users in each tab
+### Get Chat History
 
-4. **Test Real-time Chat**
+```bash
+curl http://localhost:3000/api/messages/history/bob \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
 
-   - Send messages between users
-   - Observe real-time delivery
-   - Check online/offline status updates
+### Get Online Users
 
-5. **Test Chat History**
-   - Fetch previous conversations
-   - Verify messages are stored correctly
+```bash
+curl http://localhost:3000/api/users/online
+```
 
-## API Endpoints
+### Disconnect from Socket
 
-| Method | Endpoint            | Description                 |
-| ------ | ------------------- | --------------------------- |
-| GET    | `/health`           | Health check                |
-| POST   | `/api/users/create` | Create user & get JWT token |
-| GET    | `/api/users`        | Get all users               |
+```bash
+curl -X POST http://localhost:3000/api/socket/disconnect \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
 
-## Socket.IO Events
+## 🧪 Testing
 
-### Emit (Client → Server)
+Use the REST client files in VS Code with the REST Client extension:
 
-- `message:send` - Send a message
-- `chat:history` - Fetch chat history
-- `message:read` - Mark message as read
-- `users:online` - Get online users
+1. **User Registration:** `rest-client/auth.http`
+2. **Socket Connection:** `rest-client/socketconnection.http`
+3. **Messaging:** `rest-client/chat.http`
 
-### Listen (Server → Client)
+## 📜 Available Scripts
 
-- `message:receive` - Receive new message
-- `message:sent` - Confirmation of sent message
-- `user:online` - User came online
-- `user:offline` - User went offline
-- `chat:history:response` - Chat history data
-- `users:online:response` - Online users list
+```bash
+npm run dev              # Start development server
+npm run build            # Build TypeScript to JavaScript
+npm run start            # Run production server
+npm run prisma:generate  # Generate Prisma client
+npm run prisma:migrate   # Run database migrations
+npm run prisma:studio    # Open Prisma Studio
+```
+
+## 🔄 Application Flow
+
+1. **Registration:** User registers with unique username (stored in lowercase)
+2. **Login:** User logs in via `/api/socket/connect` → receives JWT token + socket connection
+3. **Real-time:** User is now online and can send/receive messages in real-time
+4. **Messaging:** Messages sent via REST API are delivered via Socket.IO
+5. **Disconnect:** User disconnects via `/api/socket/disconnect` or closes connection
+
+## 🔧 Troubleshooting
+
+**Issue: Username already exists**
+
+- Usernames are stored in lowercase and must be unique
+- "alice", "Alice", and "ALICE" are treated as the same user
+- Choose a different username to register
+
+**Issue: User not found during login**
+
+- Ensure you've registered the user first via `/api/users/create`
+- Check username spelling (case doesn't matter)
+
+**Issue: Already connected message**
+
+- The user is already connected to the socket
+- The response will include the existing socketId and a new token
+- No action needed, you can continue using the connection
+
+**Issue: Cannot connect to database**
+
+- Check your `DATABASE_URL` in `.env`
+- Ensure your PostgreSQL server is running
+- Run `npm run prisma:migrate` to sync the schema
+
+**Issue: Socket connection fails**
+
+- Ensure the server is running on the correct port
+- Check for CORS issues if connecting from a browser
+- Verify you've called `/api/socket/connect` successfully
+
+**Issue: Messages not sending**
+
+- Ensure the receiver is online (connected via socket)
+- Check that the receiver username is correct
+- Verify the sender has a valid JWT token in Authorization header
+
+**Issue: JWT token expired**
+
+- Tokens expire after 1 day
+- Reconnect via `/api/socket/connect` to get a new token
+
+## 📝 License
+
+None
+
+## 👨‍💻 Author
+
+Chandan Chaudhary
+
+---
+
+**Happy Chatting!**

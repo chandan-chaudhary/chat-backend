@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 export interface AuthRequest extends Request {
   user?: {
@@ -15,11 +15,11 @@ export const authenticateToken = (
   res: Response,
   next: NextFunction
 ) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    return res.status(401).json({ error: "Token required" });
+    return res.status(401).json({ error: 'Token required' });
   }
 
   try {
@@ -29,7 +29,8 @@ export const authenticateToken = (
     };
     req.user = decoded;
     next();
-  } catch (error) {
-    return res.status(403).json({ error: "Invalid token" });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return res.status(403).json({ error: 'Invalid token', details: message });
   }
 };

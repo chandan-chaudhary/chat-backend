@@ -47,7 +47,6 @@ PORT=3000
 API_URL=http://localhost:{{PORT}}
 ```
 
-
 ### 3. Database Setup
 
 ```bash
@@ -154,17 +153,17 @@ The message will be delivered in real-time to Bob if they're connected!
 
 ### REST API
 
-| Method | Endpoint                          | Auth Required | Description                | Body                                              |
-| ------ | --------------------------------- | ------------- | -------------------------- | ------------------------------------------------- |
-| GET    | `/health`                         | No            | Health check               | -                                                 |
-| POST   | `/api/users/create`               | No            | Register new user          | `{ "username": "USERNAME_HERE" }`                         |
-| GET    | `/api/users`                      | Yes           | Get all users              | -                                                 |
-| GET    | `/api/users/online`               | No            | Get online users only      | -                                                 |
-| POST   | `/api/socket/connect`             | No            | Login & connect to socket  | `{ "username": "USERNAME_HERE" }`                         |
-| POST   | `/api/socket/disconnect`          | Yes           | Disconnect from socket     | -                                                 |
+| Method | Endpoint                          | Auth Required | Description                | Body                                                                  |
+| ------ | --------------------------------- | ------------- | -------------------------- | --------------------------------------------------------------------- |
+| GET    | `/health`                         | No            | Health check               | -                                                                     |
+| POST   | `/api/users/create`               | No            | Register new user          | `{ "username": "USERNAME_HERE" }`                                     |
+| GET    | `/api/users`                      | Yes           | Get all users              | -                                                                     |
+| GET    | `/api/users/online`               | No            | Get online users only      | -                                                                     |
+| POST   | `/api/socket/connect`             | No            | Login & connect to socket  | `{ "username": "USERNAME_HERE" }`                                     |
+| POST   | `/api/socket/disconnect`          | Yes           | Disconnect from socket     | -                                                                     |
 | POST   | `/api/messages/send`              | Yes           | Send message               | `{ "receiverUsername": "USERNAME_OF_RECEIVER", "content": "Hello!" }` |
-| GET    | `/api/messages/history/:username` | Yes           | Get chat history with user | -                                                 |
-| GET    | `/api/conversations`              | Yes           | Get all conversations      | -                                                 |
+| GET    | `/api/messages/history/:username` | Yes           | Get chat history with user | -                                                                     |
+| GET    | `/api/conversations`              | Yes           | Get all conversations      | -                                                                     |
 
 ### Authentication
 

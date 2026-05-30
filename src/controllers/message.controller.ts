@@ -1,7 +1,7 @@
-import { Response } from "express";
-import { Server } from "socket.io";
-import { AuthRequest } from "../middleware/auth.middleware";
-import prisma from "../prisma";
+import { Response } from 'express';
+import { Server } from 'socket.io';
+import { AuthRequest } from '../middleware/auth.middleware';
+import prisma from '../prisma';
 
 let ioInstance: Server;
 
@@ -15,13 +15,13 @@ export const sendMessage = async (req: AuthRequest, res: Response) => {
     const senderId = req.user?.userId;
 
     if (!senderId) {
-      return res.status(401).json({ error: "Unauthorized" });
+      return res.status(401).json({ error: 'Unauthorized' });
     }
 
     if (!receiverUsername || !content) {
       return res
         .status(400)
-        .json({ error: "receiverUsername and content are required" });
+        .json({ error: 'receiverUsername and content are required' });
     }
 
     // Find receiver by username
@@ -30,7 +30,7 @@ export const sendMessage = async (req: AuthRequest, res: Response) => {
     });
 
     if (!receiver) {
-      return res.status(404).json({ error: "Receiver not found" });
+      return res.status(404).json({ error: 'Receiver not found' });
     }
 
     const receiverId = receiver.id;
@@ -88,11 +88,11 @@ export const sendMessage = async (req: AuthRequest, res: Response) => {
 
     // Emit to sender as well for confirmation
     if (message.sender.socketId && message.sender.isOnline) {
-      ioInstance.to(message.sender.socketId).emit("message:sent", message);
+      ioInstance.to(message.sender.socketId).emit('message:sent', message);
     }
     // Emit to receiver
     if (receiverStatus?.socketId && receiverStatus.isOnline) {
-      ioInstance.to(receiverStatus.socketId).emit("message:receive", message);
+      ioInstance.to(receiverStatus.socketId).emit('message:receive', message);
     }
 
     res.json({
@@ -101,8 +101,8 @@ export const sendMessage = async (req: AuthRequest, res: Response) => {
       realTimeSent: receiver?.isOnline || false,
     });
   } catch (error) {
-    console.error("Error sending message:", error);
-    res.status(500).json({ error: "Failed to send message" });
+    console.error('Error sending message:', error);
+    res.status(500).json({ error: 'Failed to send message' });
   }
 };
 
@@ -112,7 +112,7 @@ export const getChatHistory = async (req: AuthRequest, res: Response) => {
     const otherUsername = req.params.otherUsername;
 
     if (!currentUserId) {
-      return res.status(401).json({ error: "Unauthorized" });
+      return res.status(401).json({ error: 'Unauthorized' });
     }
 
     // Find other user by username
@@ -121,7 +121,7 @@ export const getChatHistory = async (req: AuthRequest, res: Response) => {
     });
 
     if (!otherUser) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: 'User not found' });
     }
 
     const otherUserId = otherUser.id;
@@ -135,7 +135,7 @@ export const getChatHistory = async (req: AuthRequest, res: Response) => {
       },
       include: {
         messages: {
-          orderBy: { createdAt: "asc" },
+          orderBy: { createdAt: 'asc' },
           include: {
             sender: {
               select: {
@@ -171,7 +171,7 @@ export const getChatHistory = async (req: AuthRequest, res: Response) => {
       messages: conversation?.messages || [],
     });
   } catch (error) {
-    console.error("Error fetching chat history:", error);
-    res.status(500).json({ error: "Failed to fetch chat history" });
+    console.error('Error fetching chat history:', error);
+    res.status(500).json({ error: 'Failed to fetch chat history' });
   }
 };

@@ -1,13 +1,13 @@
-import { Response } from "express";
-import { AuthRequest } from "../middleware/auth.middleware";
-import prisma from "../prisma";
+import { Response } from 'express';
+import { AuthRequest } from '../middleware/auth.middleware';
+import prisma from '../prisma';
 
 export const getAllConversations = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user?.userId;
 
     if (!userId) {
-      return res.status(401).json({ error: "Unauthorized" });
+      return res.status(401).json({ error: 'Unauthorized' });
     }
 
     const conversations = await prisma.conversation.findMany({
@@ -32,7 +32,7 @@ export const getAllConversations = async (req: AuthRequest, res: Response) => {
           },
         },
         messages: {
-          orderBy: { createdAt: "desc" },
+          orderBy: { createdAt: 'desc' },
           take: 1,
           include: {
             sender: {
@@ -45,12 +45,12 @@ export const getAllConversations = async (req: AuthRequest, res: Response) => {
         },
       },
       orderBy: {
-        updatedAt: "desc",
+        updatedAt: 'desc',
       },
     });
 
     // Transform to show other user and last message
-    const conversationList = conversations.map((conv) => {
+    const conversationList = conversations.map(conv => {
       const otherUser = conv.user1Id === userId ? conv.user2 : conv.user1;
       const lastMessage = conv.messages[0] || null;
 
@@ -64,7 +64,7 @@ export const getAllConversations = async (req: AuthRequest, res: Response) => {
 
     res.json(conversationList);
   } catch (error) {
-    console.error("Error fetching conversations:", error);
-    res.status(500).json({ error: "Failed to fetch conversations" });
+    console.error('Error fetching conversations:', error);
+    res.status(500).json({ error: 'Failed to fetch conversations' });
   }
 };

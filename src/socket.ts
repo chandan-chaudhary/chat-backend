@@ -1,8 +1,8 @@
-import { Server, Socket } from "socket.io";
-import jwt from "jsonwebtoken";
-import prisma from "./prisma";
+import { Server, Socket } from 'socket.io';
+import jwt from 'jsonwebtoken';
+import prisma from './prisma';
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 interface AuthenticatedSocket extends Socket {
   userId?: number;
@@ -21,7 +21,7 @@ export const initializeSocket = (io: Server) => {
       const token = socket.handshake.auth.token;
 
       if (!token) {
-        return next(new Error("Authentication token required"));
+        return next(new Error('Authentication token required'));
       }
 
       // Verify JWT token
@@ -35,11 +35,12 @@ export const initializeSocket = (io: Server) => {
 
       next();
     } catch (error) {
-      next(new Error("Invalid token"));
+      const message = error instanceof Error ? error.message : 'Invalid token';
+      next(new Error(message));
     }
   });
 
-  io.on("connection", async (socket: AuthenticatedSocket) => {
+  io.on('connection', async (socket: AuthenticatedSocket) => {
     console.log(`User connected: ${socket.username} (ID: ${socket.userId})`);
 
     // Update user online status and socket ID
@@ -54,7 +55,7 @@ export const initializeSocket = (io: Server) => {
       });
 
       // Notify others about online status
-      socket.broadcast.emit("user:online", {
+      socket.broadcast.emit('user:online', {
         userId: socket.userId,
         username: socket.username,
         isOnline: true,
@@ -62,7 +63,7 @@ export const initializeSocket = (io: Server) => {
     }
 
     // Handle sending messages
-    socket.on("message:send", async (data: MessageData) => {
+    socket.on('message:send', async (data: MessageData) => {
       try {
         if (!socket.userId) return;
 
@@ -74,7 +75,7 @@ export const initializeSocket = (io: Server) => {
         });
 
         if (!receiver) {
-          socket.emit("error", { message: "Receiver not found" });
+          socket.emit('error', { message: 'Receiver not found' });
           return;
         }
 
@@ -130,19 +131,19 @@ export const initializeSocket = (io: Server) => {
         });
 
         if (receiverStatus?.socketId && receiverStatus.isOnline) {
-          io.to(receiverStatus.socketId).emit("message:receive", message);
+          io.to(receiverStatus.socketId).emit('message:receive', message);
         }
 
         // Send confirmation to sender
-        socket.emit("message:sent", message);
+        socket.emit('message:sent', message);
       } catch (error) {
-        console.error("Error sending message:", error);
-        socket.emit("error", { message: "Failed to send message" });
+        console.error('Error sending message:', error);
+        socket.emit('error', { message: 'Failed to send message' });
       }
     });
 
     // Handle fetch chat history
-    socket.on("chat:history", async (data: { otherUserId: number }) => {
+    socket.on('chat:history', async (data: { otherUserId: number }) => {
       try {
         if (!socket.userId) return;
 
@@ -157,7 +158,7 @@ export const initializeSocket = (io: Server) => {
           },
           include: {
             messages: {
-              orderBy: { createdAt: "asc" },
+              orderBy: { createdAt: 'asc' },
               include: {
                 sender: {
                   select: {
@@ -176,18 +177,17 @@ export const initializeSocket = (io: Server) => {
           },
         });
 
-        socket.emit("chat:history:response", {
+        socket.emit('chat:history:response', {
           messages: conversation?.messages || [],
         });
       } catch (error) {
-        console.error("Error fetching chat history:", error);
-        socket.emit("error", { message: "Failed to fetch chat history" });
+        console.error('Error fetching chat history:', error);
+        socket.emit('error', { message: 'Failed to fetch chat history' });
       }
     });
 
-
     // Handle get online users
-    socket.on("users:online", async () => {
+    socket.on('users:online', async () => {
       try {
         const onlineUsers = await prisma.user.findMany({
           where: { isOnline: true },
@@ -199,14 +199,14 @@ export const initializeSocket = (io: Server) => {
           },
         });
 
-        socket.emit("users:online:response", onlineUsers);
+        socket.emit('users:online:response', onlineUsers);
       } catch (error) {
-        console.error("Error fetching online users:", error);
+        console.error('Error fetching online users:', error);
       }
     });
 
     // Handle disconnect
-    socket.on("disconnect", async () => {
+    socket.on('disconnect', async () => {
       console.log(`User disconnected: ${socket.username}`);
 
       if (socket.userId) {
@@ -220,7 +220,7 @@ export const initializeSocket = (io: Server) => {
         });
 
         // Notify others about offline status
-        socket.broadcast.emit("user:offline", {
+        socket.broadcast.emit('user:offline', {
           userId: socket.userId,
           username: socket.username,
           isOnline: false,

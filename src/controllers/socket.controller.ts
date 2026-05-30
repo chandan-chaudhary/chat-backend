@@ -1,21 +1,21 @@
-import { Response, Request } from "express";
-import { AuthRequest } from "../middleware/auth.middleware";
+import { Response, Request } from 'express';
+import { AuthRequest } from '../middleware/auth.middleware';
 import {
   createSocketConnection,
   userSocketClients,
   disconnectSocket,
-} from "../clientSocketConnection";
-import jwt from "jsonwebtoken";
-import prisma from "../prisma";
+} from '../clientSocketConnection';
+import jwt from 'jsonwebtoken';
+import prisma from '../prisma';
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 export const connectSocket = async (req: Request, res: Response) => {
   try {
     const { username } = req.body;
 
     if (!username) {
-      return res.status(400).json({ error: "Username is required" });
+      return res.status(400).json({ error: 'Username is required' });
     }
     const receivedUsername = username.trim().toLowerCase();
 
@@ -27,7 +27,7 @@ export const connectSocket = async (req: Request, res: Response) => {
         return res.json({
           socketId: existingSocket?.id,
           socketConnected: true,
-          message: "Already connected",
+          message: 'Already connected',
         });
       }
     }
@@ -38,14 +38,14 @@ export const connectSocket = async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: 'User not found' });
     }
 
     // Generate JWT token
     const token = jwt.sign(
       { userId: user.id, username: user.username },
       JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: '1d' }
     );
 
     // Connect socket automatically
@@ -59,8 +59,8 @@ export const connectSocket = async (req: Request, res: Response) => {
         socketId = socket.id;
       }
     } catch (socketError) {
-      console.error("Socket connection error during login:", socketError);
-      return res.status(500).json({ error: "Failed to connect socket" });
+      console.error('Socket connection error during login:', socketError);
+      return res.status(500).json({ error: 'Failed to connect socket' });
     }
 
     res.json({
@@ -74,8 +74,8 @@ export const connectSocket = async (req: Request, res: Response) => {
       socketConnected: !!socketId,
     });
   } catch (error) {
-    console.error("Error connecting socket:", error);
-    res.status(500).json({ error: "Failed to connect socket" });
+    console.error('Error connecting socket:', error);
+    res.status(500).json({ error: 'Failed to connect socket' });
   }
 };
 
@@ -88,14 +88,14 @@ export const disconnectSocketController = async (
     console.log(username);
 
     if (!username) {
-      return res.status(401).json({ error: "Unauthorized" });
+      return res.status(401).json({ error: 'Unauthorized' });
     }
 
     // Check if user has an active socket connection
     if (!userSocketClients.has(username)) {
       return res.json({
         success: true,
-        message: "No active connection found",
+        message: 'No active connection found',
       });
     }
 
@@ -104,10 +104,10 @@ export const disconnectSocketController = async (
 
     res.json({
       success: true,
-      message: "Socket disconnected successfully",
+      message: 'Socket disconnected successfully',
     });
   } catch (error) {
-    console.error("Error disconnecting socket:", error);
-    res.status(500).json({ error: "Failed to disconnect socket" });
+    console.error('Error disconnecting socket:', error);
+    res.status(500).json({ error: 'Failed to disconnect socket' });
   }
 };

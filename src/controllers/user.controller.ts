@@ -1,13 +1,12 @@
-import { Request, Response } from "express";
-import prisma from "../prisma";
-
+import { Request, Response } from 'express';
+import prisma from '../prisma';
 
 export const createUser = async (req: Request, res: Response) => {
   try {
     const { username } = req.body;
 
     if (!username) {
-      return res.status(400).json({ error: "Username is required" });
+      return res.status(400).json({ error: 'Username is required' });
     }
     const receivedUsername = username.trim().toLowerCase();
 
@@ -17,7 +16,7 @@ export const createUser = async (req: Request, res: Response) => {
     });
 
     if (existingUser) {
-      return res.status(409).json({ error: "Username already exists" });
+      return res.status(409).json({ error: 'Username already exists' });
     }
 
     // Create new user
@@ -33,8 +32,8 @@ export const createUser = async (req: Request, res: Response) => {
       isOnline: user.isOnline,
     });
   } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ error: "Failed to create user" });
+    console.error('Error creating user:', error);
+    res.status(500).json({ error: 'Failed to create user' });
   }
 };
 
@@ -51,8 +50,8 @@ export const getAllUsers = async (req: Request, res: Response) => {
 
     res.json(users);
   } catch (error) {
-    console.error("Error fetching users:", error);
-    res.status(500).json({ error: "Failed to fetch users" });
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Failed to fetch users' });
   }
 };
 
@@ -72,7 +71,7 @@ export const getOnlineUsers = async (req: Request, res: Response) => {
 
     res.json(onlineUsers);
   } catch (error) {
-    console.error("Error fetching online users:", error);
-    res.status(500).json({ error: "Failed to fetch online users" });
+    console.error('Error fetching online users:', error);
+    res.status(500).json({ error: 'Failed to fetch online users' });
   }
 };

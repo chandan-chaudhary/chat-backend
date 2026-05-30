@@ -1,0 +1,7 @@
+node_modules/
+coverage/
+logs/
+*.log
+dist/
+package-lock.json
+rest-client/

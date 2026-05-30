@@ -1,0 +1,42 @@
+{"level":"info","message":"Health check endpoint accessed","service":"chat-app","timestamp":"2026-05-30T04:26:25.454Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:26:25 +0000] \"GET /health HTTP/1.1\" 200 50 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:26:25.456Z"}
+{"level":"info","message":"Health check endpoint accessed","service":"chat-app","timestamp":"2026-05-30T04:26:26.719Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:26:26 +0000] \"GET /health HTTP/1.1\" 200 50 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:26:26.721Z"}
+{"level":"warn","message":"Rate limit exceeded: - IP: ::ffff:127.0.0.1, User-Agent: vscode-restclient, path: /health","service":"chat-app","timestamp":"2026-05-30T04:26:27.456Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:26:27 +0000] \"GET /health HTTP/1.1\" 429 93 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:26:27.457Z"}
+{"level":"info","message":"Health check endpoint accessed","service":"chat-app","timestamp":"2026-05-30T04:27:35.869Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:27:35 +0000] \"GET /health HTTP/1.1\" 200 50 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:27:35.879Z"}
+{"level":"warn","message":"Rate limit exceeded: - IP: ::ffff:127.0.0.1, User-Agent: vscode-restclient, path: /health","service":"chat-app","timestamp":"2026-05-30T04:27:37.671Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:27:37 +0000] \"GET /health HTTP/1.1\" 429 93 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:27:37.673Z"}
+{"level":"info","message":"Health check endpoint accessed","service":"chat-app","timestamp":"2026-05-30T04:29:29.437Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:29:29 +0000] \"GET /health HTTP/1.1\" 200 50 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:29:29.440Z"}
+{"level":"info","message":"Health check endpoint accessed","service":"chat-app","timestamp":"2026-05-30T04:29:30.436Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:29:30 +0000] \"GET /health HTTP/1.1\" 200 50 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:29:30.438Z"}
+{"level":"warn","message":"Rate limit exceeded: - IP: ::ffff:127.0.0.1, User-Agent: vscode-restclient, path: /health","service":"chat-app","timestamp":"2026-05-30T04:29:31.594Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:29:31 +0000] \"GET /health HTTP/1.1\" 429 93 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:29:31.597Z"}
+{"level":"warn","message":"Rate limit exceeded: - IP: ::ffff:127.0.0.1, User-Agent: vscode-restclient, path: /health","service":"chat-app","timestamp":"2026-05-30T04:30:11.991Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:30:12 +0000] \"GET /health HTTP/1.1\" 429 93 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:30:12.001Z"}
+{"level":"warn","message":"Rate limit exceeded: - IP: ::ffff:127.0.0.1, User-Agent: vscode-restclient, path: /health","service":"chat-app","timestamp":"2026-05-30T04:30:16.042Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:30:16 +0000] \"GET /health HTTP/1.1\" 429 93 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:30:16.044Z"}
+{"level":"warn","message":"Rate limit exceeded: - IP: ::ffff:127.0.0.1, User-Agent: vscode-restclient, path: /health","service":"chat-app","timestamp":"2026-05-30T04:30:16.785Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:30:16 +0000] \"GET /health HTTP/1.1\" 429 93 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:30:16.788Z"}
+{"level":"warn","message":"Rate limit exceeded: - IP: ::ffff:127.0.0.1, User-Agent: vscode-restclient, path: /health","service":"chat-app","timestamp":"2026-05-30T04:30:17.424Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:30:17 +0000] \"GET /health HTTP/1.1\" 429 93 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:30:17.427Z"}
+{"level":"info","message":"Health check endpoint accessed","service":"chat-app","timestamp":"2026-05-30T04:32:18.502Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:32:18 +0000] \"GET /health HTTP/1.1\" 200 50 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:32:18.504Z"}
+{"level":"info","message":"Health check endpoint accessed","service":"chat-app","timestamp":"2026-05-30T04:32:19.503Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:32:19 +0000] \"GET /health HTTP/1.1\" 200 50 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:32:19.504Z"}
+{"level":"warn","message":"Rate limit exceeded: - IP: ::ffff:127.0.0.1, User-Agent: vscode-restclient, path: /health","service":"chat-app","timestamp":"2026-05-30T04:32:20.723Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:32:20 +0000] \"GET /health HTTP/1.1\" 429 93 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:32:20.724Z"}
+{"level":"info","message":"Health check endpoint accessed","service":"chat-app","timestamp":"2026-05-30T04:34:20.152Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:34:20 +0000] \"GET /health HTTP/1.1\" 200 50 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:34:20.153Z"}
+{"level":"info","message":"Health check endpoint accessed","service":"chat-app","timestamp":"2026-05-30T04:34:20.323Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:34:20 +0000] \"GET /health HTTP/1.1\" 200 50 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:34:20.326Z"}
+{"level":"warn","message":"Rate limit exceeded: - IP: ::ffff:127.0.0.1, User-Agent: vscode-restclient, path: /health","service":"chat-app","timestamp":"2026-05-30T04:34:20.449Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:34:20 +0000] \"GET /health HTTP/1.1\" 429 93 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:34:20.450Z"}
+{"level":"info","message":"Health check endpoint accessed","service":"chat-app","timestamp":"2026-05-30T04:34:20.495Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:34:20 +0000] \"GET /health HTTP/1.1\" 200 50 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:34:20.497Z"}
+{"level":"warn","message":"Rate limit exceeded: - IP: ::ffff:127.0.0.1, User-Agent: vscode-restclient, path: /health","service":"chat-app","timestamp":"2026-05-30T04:34:20.521Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:34:20 +0000] \"GET /health HTTP/1.1\" 429 93 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:34:20.527Z"}
+{"level":"warn","message":"Rate limit exceeded: - IP: ::ffff:127.0.0.1, User-Agent: vscode-restclient, path: /health","service":"chat-app","timestamp":"2026-05-30T04:34:20.537Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [30/May/2026:04:34:20 +0000] \"GET /health HTTP/1.1\" 429 93 \"-\" \"vscode-restclient\"","service":"chat-app","timestamp":"2026-05-30T04:34:20.539Z"}

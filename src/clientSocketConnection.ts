@@ -1,6 +1,6 @@
-import { io, Socket } from "socket.io-client";
+import { io, Socket } from 'socket.io-client';
 
-const API_URL = process.env.API_URL || "http://localhost:3000";
+const API_URL = process.env.API_URL || 'http://localhost:3000';
 
 interface UserStatusData {
   userId: number;
@@ -35,53 +35,53 @@ export const createSocketConnection = (
       reconnection: true,
     });
 
-    socket.on("connect", () => {
-      console.log("Connected to Socket.IO", socket.id);
+    socket.on('connect', () => {
+      console.log('Connected to Socket.IO', socket.id);
       console.log(
         `\n ${username} is now online and can receive real-time messages!`
       );
-      console.log("\nPress Ctrl+C to disconnect\n");
+      console.log('\nPress Ctrl+C to disconnect\n');
       resolve(socket); // Resolve the promise with the connected socket
     });
 
-    socket.on("connect_error", (error) => {
-      console.error("Socket connection error:", error);
+    socket.on('connect_error', error => {
+      console.error('Socket connection error:', error);
       reject(error); // Reject the promise on connection error
     });
 
-    socket.on("disconnect", () => {
-      console.log("Disconnected from Socket.IO");
+    socket.on('disconnect', () => {
+      console.log('Disconnected from Socket.IO');
     });
 
-    socket.on("message:receive", (message: Message) => {
-      console.log("\n New message received:");
+    socket.on('message:receive', (message: Message) => {
+      console.log('\n New message received:');
       console.log(`From: ${message.sender.username}`);
       console.log(`Content: ${message.content}`);
       console.log(`Time: ${new Date(message.createdAt).toLocaleString()}`);
     });
 
-    socket.on("message:sent", (message: Message) => {
-      console.log("\n Message sent successfully!");
+    socket.on('message:sent', (message: Message) => {
+      console.log('\n Message sent successfully!');
       console.log(`To: ${message.receiver.username}`);
       console.log(`Content: ${message.content}`);
       console.log(`Time: ${new Date(message.createdAt).toLocaleString()}`);
     });
 
-    socket.on("user:online", (data: UserStatusData) => {
+    socket.on('user:online', (data: UserStatusData) => {
       console.log(`\n ${data.username} came online`);
     });
 
-    socket.on("user:offline", (data: UserStatusData) => {
+    socket.on('user:offline', (data: UserStatusData) => {
       console.log(`\n ${data.username} went offline`);
     });
 
-    socket.on("error", (error: Error) => {
-      console.error(" Error:", error);
+    socket.on('error', (error: Error) => {
+      console.error(' Error:', error);
     });
 
     // Handle graceful shutdown
-    process.on("SIGINT", () => {
-      console.log("Disconnecting...");
+    process.on('SIGINT', () => {
+      console.log('Disconnecting...');
       socket.disconnect();
       process.exit(0);
     });

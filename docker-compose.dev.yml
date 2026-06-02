@@ -1,0 +1,51 @@
+services:
+
+  neon-local:
+    image: neondatabase/neon_local:latest
+    container_name: chat-backend-neon-local
+    env_file:
+      - .env.development
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - ./.neon_local/:/tmp/.neon_local
+      - ./.git/HEAD:/tmp/.git/HEAD:ro,consistent
+    
+    healthcheck:
+      # test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -p 5432"]
+      interval: 10s
+      timeout: 15s
+      retries: 10
+      start_period: 60s
+    networks:
+      - chat-dev
+
+
+
+  
+  app:
+    build:
+      context: .
+      target: development
+      dockerfile: Dockerfile
+    container_name: chat-backend-dev
+    ports:
+      - "3000:3000"
+      - "5555:5555"
+    env_file:
+      - .env.development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      neon-local:
+        condition: service_healthy
+    networks:
+      - chat-dev
+    restart: unless-stopped
+
+networks:
+  chat-dev:
+    driver: bridge

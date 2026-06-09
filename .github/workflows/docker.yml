@@ -101,8 +101,8 @@ jobs:
           cache-from: type=gha
           # Push cache to GitHub Actions cache
           cache-to: type=gha,mode=max
-          # Build for both AMD64 and ARM64 architectures
-          platforms: linux/amd64,linux/arm64
+          # Build for AMD64 only (ARM64 QEMU emulation causes illegal instruction errors)
+          platforms: linux/amd64
           # Use production target from multi-stage Dockerfile
           target: production
           # Pass dummy DATABASE_URL for prisma generate (doesn't need a real DB at build time)

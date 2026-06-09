@@ -45,6 +45,9 @@ jobs:
       # Generate Prisma Client from schema (required for tests)
       - name: Generate Prisma Client
         run: npx prisma generate
+        env:
+          # prisma.config.ts needs DATABASE_URL to resolve; use dummy since tests mock the DB
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       # TODO: Uncomment below when integration tests are added
       # Apply pending database migrations to test database

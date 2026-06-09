@@ -12,13 +12,13 @@ export const securityMiddleware = async (
   try {
     const user = req.user?.userId;
     let limit;
-    let message;
+    // let message;
     if (user) {
       limit = 10; // Higher limit for authenticated users
-      message = 'Authenticated user request';
+      // message = 'Authenticated user request';
     } else {
       limit = 5; // Lower limit for unauthenticated users
-      message = 'Unauthenticated user request';
+      // message = 'Unauthenticated user request';
     }
     const client = aj.withRule(
       slidingWindow({ mode: 'LIVE', interval: '1m', max: limit })

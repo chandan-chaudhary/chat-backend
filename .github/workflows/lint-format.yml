@@ -64,6 +64,12 @@ jobs:
       - name: Run Prettier check
         run: npm run prettier
 
+      # Generate Prisma Client (required for type checking)
+      - name: Generate Prisma Client
+        run: npx prisma generate
+        env:
+          DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
+
       # Run TypeScript compiler for type checking (no emit = no output files)
       - name: TypeScript type check
         run: npx tsc --noEmit

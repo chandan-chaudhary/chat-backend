@@ -26,7 +26,7 @@ export const createUser = async (req: Request, res: Response) => {
       },
     });
 
-    res.json({
+    res.status(200).json({
       id: user.id,
       username: user.username,
       isOnline: user.isOnline,
@@ -48,7 +48,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
       },
     });
 
-    res.json(users);
+    res.status(200).json(users);
   } catch (error) {
     console.error('Error fetching users:', error);
     res.status(500).json({ error: 'Failed to fetch users' });
@@ -69,7 +69,7 @@ export const getOnlineUsers = async (req: Request, res: Response) => {
       },
     });
 
-    res.json(onlineUsers);
+    res.status(200).json(onlineUsers);
   } catch (error) {
     console.error('Error fetching online users:', error);
     res.status(500).json({ error: 'Failed to fetch online users' });

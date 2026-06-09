@@ -95,7 +95,7 @@ export const sendMessage = async (req: AuthRequest, res: Response) => {
       ioInstance.to(receiverStatus.socketId).emit('message:receive', message);
     }
 
-    res.json({
+    res.status(200).json({
       success: true,
       message,
       realTimeSent: receiver?.isOnline || false,
@@ -166,7 +166,7 @@ export const getChatHistory = async (req: AuthRequest, res: Response) => {
       },
     });
 
-    res.json({
+    res.status(200).json({
       conversation: conversation || null,
       messages: conversation?.messages || [],
     });

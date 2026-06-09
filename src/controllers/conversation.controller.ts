@@ -62,7 +62,7 @@ export const getAllConversations = async (req: AuthRequest, res: Response) => {
       };
     });
 
-    res.json(conversationList);
+    res.status(200).json(conversationList);
   } catch (error) {
     console.error('Error fetching conversations:', error);
     res.status(500).json({ error: 'Failed to fetch conversations' });

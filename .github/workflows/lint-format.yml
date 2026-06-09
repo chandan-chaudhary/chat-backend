@@ -1,0 +1,69 @@
+# Workflow name displayed in GitHub Actions UI
+name: Lint & Format
+
+# Trigger configuration - when this workflow runs
+on:
+  # Run on all pull requests targeting main branch
+  pull_request:
+    branches: [main]
+  # Run on pushes to main, but only when relevant files change
+  push:
+    branches: [main]
+    # Path filtering - only trigger on code/config changes
+    paths:
+      # TypeScript source files
+      - '**/*.ts'
+      # JavaScript files
+      - '**/*.js'
+      # JSON config files
+      - '**/*.json'
+      # YAML workflow/config files
+      - '**/*.yml'
+      - '**/*.yaml'
+      # ESLint config files
+      - '.eslintrc*'
+      # Prettier config files
+      - '.prettierrc*'
+
+# Minimum permissions - only read repository contents
+permissions:
+  contents: read
+
+# Define jobs to run
+jobs:
+  # Single lint-format job
+  lint-format:
+    # Run on latest Ubuntu runner
+    runs-on: ubuntu-latest
+    # Maximum time before job is cancelled
+    timeout-minutes: 5
+    # Steps to execute in order
+    steps:
+      # Checkout repository code to runner workspace
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Install and configure Node.js with npm caching
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          # Node.js version matching Dockerfile
+          node-version: '20'
+          # Cache node_modules for faster subsequent runs
+          cache: 'npm'
+
+      # Install exact dependency versions from package-lock.json
+      - name: Install dependencies
+        run: npm ci
+
+      # Run ESLint for code quality and style issues
+      - name: Run ESLint
+        run: npm run lint
+
+      # Run Prettier to check code formatting
+      - name: Run Prettier check
+        run: npm run prettier
+
+      # Run TypeScript compiler for type checking (no emit = no output files)
+      - name: TypeScript type check
+        run: npx tsc --noEmit

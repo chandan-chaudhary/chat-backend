@@ -46,6 +46,10 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api', routes);
+app.use((req, res) => {
+  logger.warn(`404 Not Found: ${req.method} ${req.originalUrl}`);
+  res.status(404).json({ error: 'Not Found' });
+});
 
 // Set IO instance for message controller
 setIoInstance(io);

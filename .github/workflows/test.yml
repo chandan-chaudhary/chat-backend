@@ -1,0 +1,63 @@
+# Workflow name displayed in GitHub Actions UI
+name: Test
+
+# Trigger configuration - when this workflow runs
+on:
+  # Run on pushes to main branch
+  push:
+    branches: [main]
+  # Run on pull requests targeting main branch
+  pull_request:
+    branches: [main]
+
+# Environment variables available to all jobs/steps
+env:
+  # Set Node environment to test for test-specific configs
+  NODE_ENV: test
+
+# Define jobs to run
+jobs:
+  # Single test job
+  test:
+    # Run on latest Ubuntu runner
+    runs-on: ubuntu-latest
+    # Maximum time before job is cancelled (prevents hung jobs)
+    timeout-minutes: 10
+    # Steps to execute in order
+    steps:
+      # Checkout repository code to runner workspace
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Install and configure Node.js with npm caching
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          # Node.js version matching Dockerfile
+          node-version: '20'
+          # Cache node_modules for faster subsequent runs
+          cache: 'npm'
+
+      # Install exact dependency versions from package-lock.json
+      - name: Install dependencies
+        run: npm ci
+
+      # Generate Prisma Client from schema (required for tests)
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      # TODO: Uncomment below when integration tests are added
+      # Apply pending database migrations to test database
+      # - name: Run database migrations
+      #   run: npx prisma migrate deploy
+      #   env:
+      #     DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      # Execute test suite (setup.ts provides all required env vars with mock values)
+      - name: Run tests
+        run: npm test --if-present
+        # TODO: Uncomment when integration tests require real DB/ secrets
+        # env:
+        #   DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        #   JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        #   ARCJET_KEY: ${{ secrets.ARCJET_KEY }}

@@ -1,7 +1,7 @@
 import arcjet, {
   shield,
   detectBot,
-//   tokenBucket,
+  //   tokenBucket,
   slidingWindow,
 } from '@arcjet/node';
 

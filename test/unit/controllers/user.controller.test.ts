@@ -15,7 +15,9 @@ import {
 } from '../../utils/test-helpers';
 
 jest.mock('@/prisma', () => ({
-  get user() { return mockPrismaUser; },
+  get user() {
+    return mockPrismaUser;
+  },
 }));
 
 describe('User Controller', () => {

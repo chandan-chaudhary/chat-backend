@@ -105,9 +105,9 @@ jobs:
           platforms: linux/amd64,linux/arm64
           # Use production target from multi-stage Dockerfile
           target: production
-          # Pass DATABASE_URL for prisma generate (uses dummy default for PRs where secrets aren't available)
+          # Pass dummy DATABASE_URL for prisma generate (doesn't need a real DB at build time)
           build-args: |
-            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy
 
   # Deploy job - runs only on version tag pushes
   deploy:

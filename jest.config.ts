@@ -6,11 +6,7 @@ const config: Config = {
   roots: ['<rootDir>/test'],
   testMatch: ['**/*.test.ts'],
   moduleFileExtensions: ['ts', 'js', 'json'],
-  collectCoverageFrom: [
-    'src/**/*.ts',
-    '!src/app.ts',
-    '!src/connect-user.ts',
-  ],
+  collectCoverageFrom: ['src/**/*.ts', '!src/app.ts', '!src/connect-user.ts'],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
   moduleNameMapper: {
@@ -23,14 +19,13 @@ const config: Config = {
   resetMocks: true,
   restoreMocks: true,
   transform: {
-    '^.+\\.ts$': ['ts-jest', {
-      useESM: false,
-    }],
+    '^.+\\.ts$': [
+      'ts-jest',
+      {
+        useESM: false,
+      },
+    ],
   },
 };
 
 export default config;
-
-
-
-

@@ -6,7 +6,7 @@ services:
       target: production
     container_name: chat-backend-prod
     ports:
-      - "3000:3000"
+      - '3000:3000'
     env_file:
       - .env.production
     restart: unless-stopped
@@ -18,4 +18,3 @@ services:
         reservations:
           cpus: '0.25'
           memory: 256M
-

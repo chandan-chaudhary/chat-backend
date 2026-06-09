@@ -16,9 +16,15 @@ import {
 } from '../../utils/test-helpers';
 
 jest.mock('@/prisma', () => ({
-  get conversation() { return mockPrismaConversation; },
-  get user() { return mockPrismaUser; },
-  get message() { return mockPrismaMessage; },
+  get conversation() {
+    return mockPrismaConversation;
+  },
+  get user() {
+    return mockPrismaUser;
+  },
+  get message() {
+    return mockPrismaMessage;
+  },
 }));
 
 describe('Conversation Controller', () => {
@@ -35,17 +41,30 @@ describe('Conversation Controller', () => {
     it('should return all conversations for authenticated user', async () => {
       const user = createTestUser({ id: 1 });
       const otherUser = createTestUser({ id: 2, username: 'otheruser' });
-      const conversation = createTestConversation({ id: 1, user1Id: 1, user2Id: 2 });
-      const message = createTestMessage({ id: 1, conversationId: 1, senderId: 2, receiverId: 1 });
+      const conversation = createTestConversation({
+        id: 1,
+        user1Id: 1,
+        user2Id: 2,
+      });
+      const message = createTestMessage({
+        id: 1,
+        conversationId: 1,
+        senderId: 2,
+        receiverId: 1,
+      });
 
-      const conversationsWithRelations = [{
-        ...conversation,
-        user1: user,
-        user2: otherUser,
-        messages: [message],
-      }];
+      const conversationsWithRelations = [
+        {
+          ...conversation,
+          user1: user,
+          user2: otherUser,
+          messages: [message],
+        },
+      ];
 
-      mockPrismaConversation.findMany.mockResolvedValue(conversationsWithRelations);
+      mockPrismaConversation.findMany.mockResolvedValue(
+        conversationsWithRelations
+      );
 
       await getAllConversations(req, res);
 
@@ -54,8 +73,22 @@ describe('Conversation Controller', () => {
           OR: [{ user1Id: 1 }, { user2Id: 1 }],
         },
         include: {
-          user1: { select: { id: true, username: true, isOnline: true, lastSeen: true } },
-          user2: { select: { id: true, username: true, isOnline: true, lastSeen: true } },
+          user1: {
+            select: {
+              id: true,
+              username: true,
+              isOnline: true,
+              lastSeen: true,
+            },
+          },
+          user2: {
+            select: {
+              id: true,
+              username: true,
+              isOnline: true,
+              lastSeen: true,
+            },
+          },
           messages: {
             orderBy: { createdAt: 'desc' },
             take: 1,
@@ -103,17 +136,30 @@ describe('Conversation Controller', () => {
     it('should handle conversation where user is user2', async () => {
       const user = createTestUser({ id: 1 });
       const otherUser = createTestUser({ id: 2, username: 'otheruser' });
-      const conversation = createTestConversation({ id: 1, user1Id: 2, user2Id: 1 });
-      const message = createTestMessage({ id: 1, conversationId: 1, senderId: 2, receiverId: 1 });
+      const conversation = createTestConversation({
+        id: 1,
+        user1Id: 2,
+        user2Id: 1,
+      });
+      const message = createTestMessage({
+        id: 1,
+        conversationId: 1,
+        senderId: 2,
+        receiverId: 1,
+      });
 
-      const conversationsWithRelations = [{
-        ...conversation,
-        user1: otherUser,
-        user2: user,
-        messages: [message],
-      }];
+      const conversationsWithRelations = [
+        {
+          ...conversation,
+          user1: otherUser,
+          user2: user,
+          messages: [message],
+        },
+      ];
 
-      mockPrismaConversation.findMany.mockResolvedValue(conversationsWithRelations);
+      mockPrismaConversation.findMany.mockResolvedValue(
+        conversationsWithRelations
+      );
 
       await getAllConversations(req, res);
 

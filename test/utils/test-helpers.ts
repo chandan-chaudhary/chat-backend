@@ -2,17 +2,18 @@ import { Request, Response, NextFunction } from 'express';
 import { AuthRequest } from '@/middleware/auth.middleware';
 import jwt from 'jsonwebtoken';
 
-export const createMockRequest = (overrides: Partial<Request> = {}): Request => ({
-  body: {},
-  params: {},
-  query: {},
-  headers: {},
-  method: 'GET',
-  path: '/',
-  originalUrl: '/',
-  get: jest.fn(),
-  ...overrides,
-}) as Request;
+export const createMockRequest = (overrides: Partial<Request> = {}): Request =>
+  ({
+    body: {},
+    params: {},
+    query: {},
+    headers: {},
+    method: 'GET',
+    path: '/',
+    originalUrl: '/',
+    get: jest.fn(),
+    ...overrides,
+  }) as Request;
 
 export const createMockAuthRequest = (
   user?: { userId: number; username: string },
@@ -52,13 +53,15 @@ export const generateTestToken = (
   return jwt.sign(payload, secret, { expiresIn: expiresIn as any });
 };
 
-export const createTestUser = (overrides: Partial<{
-  id: number;
-  username: string;
-  isOnline: boolean;
-  socketId: string | null;
-  lastSeen: Date | null;
-}> = {}) => ({
+export const createTestUser = (
+  overrides: Partial<{
+    id: number;
+    username: string;
+    isOnline: boolean;
+    socketId: string | null;
+    lastSeen: Date | null;
+  }> = {}
+) => ({
   id: 1,
   username: 'testuser',
   isOnline: true,
@@ -67,13 +70,15 @@ export const createTestUser = (overrides: Partial<{
   ...overrides,
 });
 
-export const createTestConversation = (overrides: Partial<{
-  id: number;
-  user1Id: number;
-  user2Id: number;
-  createdAt: Date;
-  updatedAt: Date;
-}> = {}) => ({
+export const createTestConversation = (
+  overrides: Partial<{
+    id: number;
+    user1Id: number;
+    user2Id: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }> = {}
+) => ({
   id: 1,
   user1Id: 1,
   user2Id: 2,
@@ -82,26 +87,28 @@ export const createTestConversation = (overrides: Partial<{
   ...overrides,
 });
 
-export const createTestMessage = (overrides: Partial<{
-  id: number;
-  content: string;
-  conversationId: number;
-  senderId: number;
-  receiverId: number;
-  isRead: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  sender?: {
+export const createTestMessage = (
+  overrides: Partial<{
     id: number;
-    username: string;
-    socketId?: string;
-    isOnline?: boolean;
-  };
-  receiver?: {
-    id: number;
-    username: string;
-  };
-}> = {}) => ({
+    content: string;
+    conversationId: number;
+    senderId: number;
+    receiverId: number;
+    isRead: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    sender?: {
+      id: number;
+      username: string;
+      socketId?: string;
+      isOnline?: boolean;
+    };
+    receiver?: {
+      id: number;
+      username: string;
+    };
+  }> = {}
+) => ({
   id: 1,
   content: 'Test message',
   conversationId: 1,
@@ -165,12 +172,22 @@ export const expectJsonResponse = (
   expectedStatus: number,
   expectedBody?: Record<string, unknown>
 ) => {
-  if ((res.status as jest.Mock).mock.calls.length > 0 && (res.status as jest.Mock).mock.calls[0][0] !== expectedStatus) {
-    throw new Error('TEST FAILED WITH UNEXPECTED STATUS ' + (res.status as jest.Mock).mock.calls[0][0] + '. BODY: ' + JSON.stringify((res.json as jest.Mock).mock.calls[0]?.[0]));
+  if (
+    (res.status as jest.Mock).mock.calls.length > 0 &&
+    (res.status as jest.Mock).mock.calls[0][0] !== expectedStatus
+  ) {
+    throw new Error(
+      'TEST FAILED WITH UNEXPECTED STATUS ' +
+        (res.status as jest.Mock).mock.calls[0][0] +
+        '. BODY: ' +
+        JSON.stringify((res.json as jest.Mock).mock.calls[0]?.[0])
+    );
   }
   expect(res.status).toHaveBeenCalledWith(expectedStatus);
   if (expectedBody) {
-    expect(res.json).toHaveBeenCalledWith(expect.objectContaining(expectedBody));
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining(expectedBody)
+    );
   }
 };
 

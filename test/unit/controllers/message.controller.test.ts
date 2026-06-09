@@ -21,9 +21,15 @@ import {
 } from '../../utils/test-helpers';
 
 jest.mock('@/prisma', () => ({
-  get user() { return mockPrismaUser; },
-  get conversation() { return mockPrismaConversation; },
-  get message() { return mockPrismaMessage; },
+  get user() {
+    return mockPrismaUser;
+  },
+  get conversation() {
+    return mockPrismaConversation;
+  },
+  get message() {
+    return mockPrismaMessage;
+  },
 }));
 
 const mockIo = {
@@ -45,23 +51,38 @@ describe('Message Controller', () => {
 
   describe('sendMessage', () => {
     // const sender = createTestUser({ id: 1, username: 'sender', socketId: 'socket-1', isOnline: true });
-    const receiver = createTestUser({ id: 2, username: 'receiver', socketId: 'socket-2', isOnline: true });
-    const conversation = createTestConversation({ id: 1, user1Id: 1, user2Id: 2 });
+    const receiver = createTestUser({
+      id: 2,
+      username: 'receiver',
+      socketId: 'socket-2',
+      isOnline: true,
+    });
+    const conversation = createTestConversation({
+      id: 1,
+      user1Id: 1,
+      user2Id: 2,
+    });
     const message = createTestMessage({
       id: 1,
       content: 'Hello!',
       conversationId: 1,
       senderId: 1,
       receiverId: 2,
-      sender: { id: 1, username: 'sender', socketId: 'socket-1', isOnline: true },
+      sender: {
+        id: 1,
+        username: 'sender',
+        socketId: 'socket-1',
+        isOnline: true,
+      },
       receiver: { id: 2, username: 'receiver' },
     });
 
     it('should send message successfully when both users exist', async () => {
       req.body = { receiverUsername: 'receiver', content: 'Hello!' };
-      mockPrismaUser.findUnique.mockImplementation(async (args) => {
+      mockPrismaUser.findUnique.mockImplementation(async args => {
         if (args?.where?.username === 'receiver') return receiver;
-        if (args?.where?.id === 2) return { socketId: 'socket-2', isOnline: true };
+        if (args?.where?.id === 2)
+          return { socketId: 'socket-2', isOnline: true };
         return null;
       });
       mockPrismaConversation.findFirst.mockResolvedValue(conversation);
@@ -81,9 +102,10 @@ describe('Message Controller', () => {
 
     it('should create new conversation if none exists', async () => {
       req.body = { receiverUsername: 'receiver', content: 'Hello!' };
-      mockPrismaUser.findUnique.mockImplementation(async (args) => {
+      mockPrismaUser.findUnique.mockImplementation(async args => {
         if (args?.where?.username === 'receiver') return receiver;
-        if (args?.where?.id === 2) return { socketId: 'socket-2', isOnline: true };
+        if (args?.where?.id === 2)
+          return { socketId: 'socket-2', isOnline: true };
         return null;
       });
       mockPrismaConversation.findFirst.mockResolvedValue(null);
@@ -112,7 +134,11 @@ describe('Message Controller', () => {
 
       await sendMessage(req, res);
 
-      expectErrorResponse(res, 400, 'receiverUsername and content are required');
+      expectErrorResponse(
+        res,
+        400,
+        'receiverUsername and content are required'
+      );
     });
 
     it('should return 400 if content is missing', async () => {
@@ -120,7 +146,11 @@ describe('Message Controller', () => {
 
       await sendMessage(req, res);
 
-      expectErrorResponse(res, 400, 'receiverUsername and content are required');
+      expectErrorResponse(
+        res,
+        400,
+        'receiverUsername and content are required'
+      );
     });
 
     it('should return 404 if receiver not found', async () => {
@@ -142,11 +172,16 @@ describe('Message Controller', () => {
     });
 
     it('should handle offline receiver gracefully', async () => {
-      const offlineReceiver = createTestUser({ id: 2, username: 'receiver', isOnline: false, socketId: null });
+      const offlineReceiver = createTestUser({
+        id: 2,
+        username: 'receiver',
+        isOnline: false,
+        socketId: null,
+      });
       const offlineMessage = { ...message, realTimeSent: false };
-      
+
       req.body = { receiverUsername: 'receiver', content: 'Hello!' };
-      mockPrismaUser.findUnique.mockImplementation(async (args) => {
+      mockPrismaUser.findUnique.mockImplementation(async args => {
         if (args?.where?.username === 'receiver') return offlineReceiver;
         if (args?.where?.id === 2) return { socketId: null, isOnline: false };
         return null;
@@ -161,15 +196,26 @@ describe('Message Controller', () => {
   });
 
   describe('getChatHistory', () => {
-    const conversation = createTestConversation({ id: 1, user1Id: 1, user2Id: 2 });
+    const conversation = createTestConversation({
+      id: 1,
+      user1Id: 1,
+      user2Id: 2,
+    });
     const messages = [
       createTestMessage({ id: 1, content: 'Hi', senderId: 1, receiverId: 2 }),
-      createTestMessage({ id: 2, content: 'Hello!', senderId: 2, receiverId: 1 }),
+      createTestMessage({
+        id: 2,
+        content: 'Hello!',
+        senderId: 2,
+        receiverId: 1,
+      }),
     ];
 
     it('should return chat history for valid users', async () => {
       req.params = { otherUsername: 'receiver' };
-      mockPrismaUser.findUnique.mockResolvedValue(createTestUser({ id: 2, username: 'receiver' }));
+      mockPrismaUser.findUnique.mockResolvedValue(
+        createTestUser({ id: 2, username: 'receiver' })
+      );
       mockPrismaConversation.findFirst.mockResolvedValue({
         ...conversation,
         messages,
@@ -206,7 +252,9 @@ describe('Message Controller', () => {
 
     it('should return empty messages if no conversation exists', async () => {
       req.params = { otherUsername: 'receiver' };
-      mockPrismaUser.findUnique.mockResolvedValue(createTestUser({ id: 2, username: 'receiver' }));
+      mockPrismaUser.findUnique.mockResolvedValue(
+        createTestUser({ id: 2, username: 'receiver' })
+      );
       mockPrismaConversation.findFirst.mockResolvedValue(null);
 
       await getChatHistory(req, res);

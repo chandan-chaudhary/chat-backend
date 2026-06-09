@@ -23,7 +23,8 @@ CMD ["npm", "run", "dev"]
 FROM node:20-alpine AS builder
 
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+COPY package*.json ./
+RUN npm ci
 COPY . .
 ARG DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy
 RUN npx prisma generate
@@ -39,9 +40,9 @@ ENV NODE_ENV=production
 RUN addgroup --system app && adduser --system --ingroup app app
 
 COPY --from=builder --chown=app:app /app/prisma ./prisma
-COPY --from=builder --chown=app:app /app/node_modules ./node_modules
 COPY --from=builder --chown=app:app /app/dist ./dist
 COPY --from=builder --chown=app:app /app/package.json ./package.json
+COPY --from=deps --chown=app:app /app/node_modules ./node_modules
 
 USER app
 EXPOSE 3000
